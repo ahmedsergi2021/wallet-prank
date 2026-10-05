@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallet App</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Inter,Arial,sans-serif;
+}
+
+body{
+  background:#eef1f5;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+}
+
+.phone{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  background:#f8fafc;
+  position:relative;
+  overflow:hidden;
+}
+
+/* Header */
+.header{
+  background:#111827;
+  color:white;
+  padding:25px 22px 70px;
+  border-radius:0 0 30px 30px;
+}
+
+.header-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.app-name{
+  font-size:20px;
+  font-weight:800;
+}
+
+.avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:#374151;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:bold;
+}
+
+/* Balance */
+.balance-card{
+  background:white;
+  margin:-45px 18px 20px;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 12px 30px rgba(0,0,0,.10);
+  position:relative;
+}
+
+.balance-title{
+  color:#6b7280;
+  font-size:13px;
+}
+
+.balance{
+  font-size:34px;
+  font-weight:800;
+  margin:7px 0;
+  letter-spacing:-1px;
+}
+
+.balance-hidden{
+  font-size:30px;
+  letter-spacing:5px;
+}
+
+.account{
+  color:#9ca3af;
+  font-size:12px;
+}
+
+/* Quick actions */
+.actions{
+  display:flex;
+  justify-content:space-around;
+  padding:5px 15px 22px;
+}
+
+.action{
+  text-align:center;
+  font-size:12px;
+  color:#4b5563;
+}
+
+.action-icon{
+  width:48px;
+  height:48px;
+  background:white;
+  border-radius:15px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:20px;
+  margin-bottom:7px;
+  box-shadow:0 5px 15px rgba(0,0,0,.07);
+}
+
+/* Alert */
+.alert{
+  margin:0 18px 20px;
+  background:#fff;
+  border-radius:18px;
+  padding:18px;
+  border-left:5px solid #dc2626;
+  box-shadow:0 7px 20px rgba(0,0,0,.07);
+  animation:shake .7s ease;
+  cursor:pointer;
+}
+
+.alert-top{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.alert-icon{
+  width:43px;
+  height:43px;
+  border-radius:13px;
+  background:#fee2e2;
+  color:#dc2626;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.alert-title{
+  font-weight:800;
+  color:#111827;
+}
+
+.alert-text{
+  color:#6b7280;
+  font-size:13px;
+  margin-top:3px;
+}
+
+.tap{
+  margin-top:13px;
+  color:#dc2626;
+  font-size:12px;
+  font-weight:bold;
+}
+
+/* Transactions */
+.section{
+  padding:0 20px;
+}
+
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:13px;
+}
+
+.section-title h3{
+  font-size:17px;
+}
+
+.section-title span{
+  color:#6b7280;
+  font-size:12px;
+}
+
+.transaction{
+  background:white;
+  padding:15px;
+  border-radius:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.transaction-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.trans-icon{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  background:#f3f4f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.trans-name{
+  font-weight:700;
+  font-size:14px;
+}
+
+.trans-date{
+  font-size:11px;
+  color:#9ca3af;
+  margin-top:3px;
+}
+
+.amount{
+  font-weight:800;
+  color:#dc2626;
+  font-size:14px;
+}
+
+/* Bottom nav */
+.bottom{
+  position:sticky;
+  bottom:0;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  padding:14px 5px;
+  border-top:1px solid #e5e7eb;
+  margin-top:25px;
+}
+
+.nav{
+  text-align:center;
+  color:#6b7280;
+  font-size:11px;
+}
+
+.nav.active{
+  color:#111827;
+  font-weight:bold;
+}
+
+.nav-icon{
+  font-size:19px;
+  margin-bottom:3px;
+}
+
+/* Modal */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:10;
+}
+
+.modal-card{
+  width:100%;
+  max-width:430px;
+  background:white;
+  border-radius:28px 28px 0 0;
+  padding:30px 24px 35px;
+  text-align:center;
+  animation:slideUp .35s ease;
+}
+
+.big-warning{
+  width:70px;
+  height:70px;
+  background:#fee2e2;
+  color:#dc2626;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin:0 auto 17px;
+  font-size:35px;
+  font-weight:bold;
+}
+
+.modal-card h2{
+  font-size:24px;
+  margin-bottom:10px;
+}
+
+.modal-card p{
+  color:#6b7280;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.fake-status{
+  background:#fef2f2;
+  color:#b91c1c;
+  border-radius:13px;
+  padding:13px;
+  margin:18px 0;
+  font-weight:bold;
+  font-size:14px;
+}
+
+.close{
+  width:100%;
+  border:0;
+  padding:15px;
+  background:#111827;
+  color:white;
+  border-radius:13px;
+  font-weight:bold;
+  font-size:15px;
+  cursor:pointer;
+}
+
+.prank{
+  display:none;
+}
+
+.prank-icon{
+  width:75px;
+  height:75px;
+  background:#dcfce7;
+  color:#16a34a;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 18px;
+  font-size:40px;
+}
+
+.safe{
+  background:#dcfce7;
+  color:#166534;
+  padding:14px;
+  border-radius:12px;
+  margin:18px 0;
+  font-weight:bold;
+  font-size:13px;
+}
+
+/* Animations */
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-5px)}
+  40%{transform:translateX(5px)}
+  60%{transform:translateX(-4px)}
+  80%{transform:translateX(4px)}
+}
+
+@keyframes slideUp{
+  from{transform:translateY(100%)}
+  to{transform:translateY(0)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="phone">
+
+  <div class="header">
+    <div class="header-top">
+      <div class="app-name">MyWallet</div>
+      <div class="avatar">M</div>
+    </div>
+  </div>
+
+  <div class="balance-card">
+    <div class="balance-title">Available Balance</div>
+    <div class="balance">$0.00</div>
+    <div class="account">Wallet •••• 4821</div>
+  </div>
+
+  <div class="actions">
+
+    <div class="action">
+      <div class="action-icon">↗</div>
+      Send
+    </div>
+
+    <div class="action">
+      <div class="action-icon">＋</div>
+      Add Money
+    </div>
+
+    <div class="action">
+      <div class="action-icon">↙</div>
+      Receive
+    </div>
+
+    <div class="action">
+      <div class="action-icon">⋯</div>
+      More
+    </div>
+
+  </div>
+
+  <!-- ALERT -->
+  <div class="alert" onclick="openAlert()">
+
+    <div class="alert-top">
+
+      <div class="alert-icon">!</div>
+
+      <div>
+        <div class="alert-title">
+          Payment Alert
+        </div>
+
+        <div class="alert-text">
+          Your wallet balance is not sufficient.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tap">
+      TAP TO REVIEW →
+    </div>
+
+  </div>
+
+  <!-- TRANSACTIONS -->
+  <div class="section">
+
+    <div class="section-title">
+      <h3>Recent Activity</h3>
+      <span>View all</span>
+    </div>
+
+    <div class="transaction">
+
+      <div class="transaction-left">
+
+        <div class="trans-icon">🛒</div>
+
+        <div>
+          <div class="trans-name">
+            Online Payment
+          </div>
+          <div class="trans-date">
+            Today • 11:48 PM
+          </div>
+        </div>
+
+      </div>
+
+      <div class="amount">
+        -$1,250.00
+      </div>
+
+    </div>
+
+    <div class="transaction">
+
+      <div class="transaction-left">
+
+        <div class="trans-icon">💳</div>
+
+        <div>
+          <div class="trans-name">
+            Card Payment
+          </div>
+          <div class="trans-date">
+            Yesterday
+          </div>
+        </div>
+
+      </div>
+
+      <div class="amount">
+        -$85.00
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="bottom">
+
+    <div class="nav active">
+      <div class="nav-icon">⌂</div>
+      Home
+    </div>
+
+    <div class="nav">
+      <div class="nav-icon">↕</div>
+      Activity
+    </div>
+
+    <div class="nav">
+      <div class="nav-icon">▣</div>
+      Cards
+    </div>
+
+    <div class="nav">
+      <div class="nav-icon">⚙</div>
+      Settings
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ALERT MODAL -->
+<div class="modal" id="modal">
+
+  <div class="modal-card" id="warning">
+
+    <div class="big-warning">!</div>
+
+    <h2>Payment Failed</h2>
+
+    <p>
+      The requested transaction could not be completed
+      because the available wallet balance is insufficient.
+    </p>
+
+    <div class="fake-status">
+      Required: $1,250.00<br>
+      Available: $0.00
+    </div>
+
+    <button class="close" onclick="revealPrank()">
+      Continue
+    </button>
+
+  </div>
+
+
+  <!-- PRANK REVEAL -->
+  <div class="modal-card prank" id="prank">
+
+    <div class="prank-icon">✓</div>
+
+    <h2>😂 GOT YOU!</h2>
+
+    <p>
+      Don't panic! Nothing happened to your wallet.
+      This was only a harmless prank.
+    </p>
+
+    <div class="safe">
+      ✓ Your money is safe<br>
+      ✓ No transaction was made<br>
+      ✓ No information was collected
+    </div>
+
+    <button class="close" onclick="closeModal()">
+      Close
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+function openAlert(){
+  document.getElementById("modal").style.display="flex";
+}
+
+function revealPrank(){
+
+  document.getElementById("warning").style.display="none";
+
+  document.getElementById("prank").style.display="block";
+
+}
+
+function closeModal(){
+
+  document.getElementById("modal").style.display="none";
+
+  document.getElementById("warning").style.display="block";
+
+  document.getElementById("prank").style.display="none";
+
+}
+
+</script>
+
+</body>
+</html>
